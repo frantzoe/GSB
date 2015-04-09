@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">GSB</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="search_welcome">Pour rechercher un médicament, veuillez cliquer l\'icone de recherche sinon l\'icone d\'ajout pour la saisie d\'un médicament.</string>
+    <string name="gsb_home_logo">GSB logo Home</string>
+    <string name="list_empty">aucun médicament a ce libellé</string>
+    <string name="action_search">Recherche</string>
+    <string name="title_activity_search">GSB</string>
+    <string name="search_hint">Recherche</string>
+    <string name="app_label">GSB</string>
+    <string name="action_add">Ajouter</string>
+    <string name="action_information">Information</string>
+    <string name="title_activity_info">Information</string>
+    <string name="info_text">Bienvenu(e) sur l\'application Galaxy Swiss Bourdin, votre base de données regroupant des informations sur les différents médicaments du marché. Cette application a été développée dans le cadre d\'un projet universitaire.</string>
+    <string name="title_activity_add">Ajouter</string>
+    <string name="selection_classe">Selectionner une Classe</string>
+    <string name="selection_dci">Selectionner une DCI</string>
+    <string name="dialog_fermer_text">Fermer</string>
+</resources>
