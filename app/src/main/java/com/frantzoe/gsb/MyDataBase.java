@@ -15,7 +15,7 @@ import java.util.ArrayList;
  */
 
 public class MyDataBase extends SQLiteOpenHelper {
-    //Les valaeurs seront inserees dans les tables a l'aide de la methode String.split ce qui explique les longues chaines avec pleins de virgules
+    //Les valeurs seront inserees dans les tables a l'aide de la methode String.split ce qui explique les longues chaines avec pleins de virgules
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "gsbdd";
     //DONNEES TABLE CLASSE
@@ -38,17 +38,15 @@ public class MyDataBase extends SQLiteOpenHelper {
     public static final String COL_DCI_CLA = "_classe";
     public static final String COL_DCI_ANN = "_annee";
     public static final String[] DONNEES_DCI = new String[]{
-            "20,Value,1,0", //Valeur inseree dans la base afin que l'id de la premiere valeur commence à 21
-            //L'insertion de cette valeur resulte du fait que les princeps (au nombre de 20) et les generiques seront melangés dans une vue plus bas
-            "0,Aciclovir,5,2000", "0,Amitriptyline,6,0",
-            "0,Amlodipine,1,2007", "0,Amoxicilline,4,2007",
-            "0,Clarithromycine,4,2000", "0,Dilitazem,3,2000",
-            "0,Flecainide,3,2003", "0,Fluindione,2,0",
-            "0,Ganciclovir,5,0", "0,Irbesartan,1,2012",
-            "0,Linezolide,4,0", "0,Nefopam,6,2010",
-            "0,Nicardipine,1,2006", "0,Ofloxacine,4,2003",
-            "0,Olmesartan,1,0", "0,Oseltamivir,5,0",
-            "0,Paracetamol,6,2000", "0,Warfarine,2,0"
+            "Aciclovir,5,2000", "Amitriptyline,6,0",
+            "Amlodipine,1,2007", "Amoxicilline,4,2007",
+            "Clarithromycine,4,2000", "Dilitazem,3,2000",
+            "Flecainide,3,2003", "Fluindione,2,0",
+            "Ganciclovir,5,0", "Irbesartan,1,2012",
+            "Linezolide,4,0", "Nefopam,6,2010",
+            "Nicardipine,1,2006", "Ofloxacine,4,2003",
+            "Olmesartan,1,0", "Oseltamivir,5,0",
+            "Paracetamol,6,2000", "Warfarine,2,0"
     };
     //DONNEES TABLE PRINCEPS
     public static final String TABLE_PRINCEPS = "princeps";
@@ -56,18 +54,17 @@ public class MyDataBase extends SQLiteOpenHelper {
     public static final String COL_PRINCEPS_NOM = "_nomcommercial";
     public static final String COL_PRINCEPS_DCI = "_dci";
     public static final String[] DONNEES_PRINCEPS = new String[]{
-            "Acupan,32", "Alteis,35", "Amlor,23",
-            "Aprovel,30", "Clamoxyl,24", "Coumadine,38",
-            "Cymevan,29", "Doliprane,37", "Efferalgan,37",
-            "Flecaine,27", "Laroxyl,22", "Loxen,33",
-            "Oflocet,34", "Olmetec,35", "Previscan,28",
-            "Tamiflu,36", "Tildiem,26", "Zeclar,25",
-            "Zovirax,21", "Zyvoxid,31"
+            "Acupan,12", "Alteis,15", "Amlor,3",
+            "Aprovel,10", "Clamoxyl,4", "Coumadine,18",
+            "Cymevan,9", "Doliprane,17", "Efferalgan,17",
+            "Flecaine,7", "Laroxyl,2", "Loxen,13",
+            "Oflocet,14", "Olmetec,15", "Previscan,8",
+            "Tamiflu,16", "Tildiem,6", "Zeclar,5",
+            "Zovirax,1", "Zyvoxid,11"
     };
     public static final String VIEW_PRRINCEPS_DCI = "medicaments";
-    SQLiteDatabase database;
 
-    public MyDataBase(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+    public MyDataBase(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -91,9 +88,8 @@ public class MyDataBase extends SQLiteOpenHelper {
                 + "FOREIGN KEY (" + COL_DCI_CLA + ") REFERENCES " + TABLE_CLASSE + "(" + COL_CLASSE_ID + "));");
         //INSERTION TABLE DCI
         for (String DONNEES : DONNEES_DCI) {
-            addDCI(database, Integer.parseInt(DONNEES.split(",")[0]), DONNEES.split(",")[1], Integer.parseInt(DONNEES.split(",")[2]), Integer.parseInt(DONNEES.split(",")[3]));
+            addDCI(database, DONNEES.split(",")[0], Integer.parseInt(DONNEES.split(",")[1]), Integer.parseInt(DONNEES.split(",")[2]));
         }
-        database.execSQL("DELETE FROM " + TABLE_DCI + " WHERE " + COL_DCI_ID + " = " + 20);
         //CREATION TABLE PRINCEPS
         database.execSQL("CREATE TABLE " + TABLE_PRINCEPS + "("
                 + COL_PRINCEPS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -106,16 +102,21 @@ public class MyDataBase extends SQLiteOpenHelper {
         }
         //CREATION VUE DE TOUS LES MEDICAMENTS
         database.execSQL(
+                //Concatenation des indentifiants avec 'p' || _id pour princeps et 'd' || _id pour dci
                 "CREATE VIEW "
                 + VIEW_PRRINCEPS_DCI
-                + " AS SELECT "
+                + " AS SELECT 'p' || "
+                + COL_PRINCEPS_ID
+                + " AS "
                 + COL_PRINCEPS_ID
                 + ", "
                 + COL_PRINCEPS_NOM
                 + " FROM "
                 + TABLE_PRINCEPS
-                + " UNION ALL SELECT "
+                + " UNION ALL SELECT 'd' || "
                 + COL_DCI_ID
+                + " AS "
+                + COL_PRINCEPS_ID
                 + ", "
                 + COL_DCI_DEN
                 + " AS "
@@ -140,9 +141,8 @@ public class MyDataBase extends SQLiteOpenHelper {
     }
 
     //Ajout d'un DCI
-    public void addDCI(SQLiteDatabase database, int id, String denomination, int classeid, int annnee){
+    public void addDCI(SQLiteDatabase database, String denomination, int classeid, int annnee){
         ContentValues values = new ContentValues();
-        if (id != 0) {values.put(COL_DCI_ID, id);}
         values.put(COL_DCI_DEN, denomination);
         if (annnee != 0) {values.put(COL_DCI_ANN, annnee);}
         values.put(COL_DCI_CLA, classeid);
@@ -229,14 +229,14 @@ public class MyDataBase extends SQLiteOpenHelper {
         return idClasse;
     }
 
-    public int getNombreMedicaments(){
+    /*public int getNombreMedicaments(){
         SQLiteStatement sqLiteStatement = getReadableDatabase().compileStatement(
                 "SELECT (SELECT COUNT(*) FROM "
                 + TABLE_PRINCEPS
                 + ") + (SELECT COUNT(*) FROM "
                 + TABLE_DCI + ")");
         return (int) sqLiteStatement.simpleQueryForLong();
-    }
+    }*/
 
     //Retourne la liste des DCI servant a alimenter le dialog lors de l'ajout d'un princeps
     public ArrayList<DCI> getListDCI() {

@@ -35,7 +35,7 @@ public class AddActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
-        myDB = new MyDataBase(this, null, null, 1);
+        myDB = new MyDataBase(this);
         buttonClasse = (Button) findViewById(R.id.buttonClasse);
         buttonDCI = (Button) findViewById(R.id.buttonDCI);
         editTextName = (EditText) findViewById(R.id.editTextName);
@@ -79,7 +79,8 @@ public class AddActivity extends ActionBarActivity {
                     if (editTextAnnee.getText().length() != 0){
                         annee = Integer.parseInt(editTextAnnee.getText().toString());
                     }
-                    myDB.addDCI(myDB.getWritableDatabase(), 0, editTextName.getText().toString(), myDB.getIdClasse(nomClasse), annee);
+                    //myDB.addDCI(myDB.getWritableDatabase(), 0, editTextName.getText().toString(), myDB.getIdClasse(nomClasse), annee);
+                    myDB.addDCI(myDB.getWritableDatabase(), editTextName.getText().toString(), myDB.getIdClasse(nomClasse), annee);
                     Toast.makeText(getBaseContext(), "Generique ajouté!", Toast.LENGTH_SHORT).show();
                     editTextName.setText("");
                     editTextAnnee.setText("");

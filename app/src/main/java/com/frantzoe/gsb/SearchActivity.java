@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteCursor;
 import android.support.v7.app.ActionBarActivity;
@@ -13,14 +12,12 @@ import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.FilterQueryProvider;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 public class SearchActivity extends ActionBarActivity implements SearchView.OnQueryTextListener {
@@ -36,12 +33,12 @@ public class SearchActivity extends ActionBarActivity implements SearchView.OnQu
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        myDB = new MyDataBase(this, null, null, 1);
+        myDB = new MyDataBase(this);
         listProducts = (ListView) findViewById(R.id.listProducts);
         //Utilisation du SimpleCursorAdapter qui traite directement un cursor, comme ca on a pas a passer par un ArrayList pour remplir la listView
         //Le SimpleCursorAdapter est aussi indispensable quand il s'agit de filtrer les resultats d'un cursor
         adapter = new SimpleCursorAdapter(this, android.R.layout.simple_list_item_1, myDB.allMedicaments(),
-                new String[]{MyDataBase.COL_PRINCEPS_NOM, MyDataBase.COL_PRINCEPS_ID},
+                new String[]{MyDataBase.COL_PRINCEPS_NOM},
                 new int[]{android.R.id.text1}, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
         //Filtrage du SimpleCursorAdapter
         adapter.setFilterQueryProvider(new FilterQueryProvider() {
