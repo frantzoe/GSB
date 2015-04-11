@@ -79,7 +79,6 @@ public class AddActivity extends ActionBarActivity {
                     if (editTextAnnee.getText().length() != 0){
                         annee = Integer.parseInt(editTextAnnee.getText().toString());
                     }
-                    //myDB.addDCI(myDB.getWritableDatabase(), 0, editTextName.getText().toString(), myDB.getIdClasse(nomClasse), annee);
                     myDB.addDCI(myDB.getWritableDatabase(), editTextName.getText().toString(), myDB.getIdClasse(nomClasse), annee);
                     Toast.makeText(getBaseContext(), "Generique ajouté!", Toast.LENGTH_SHORT).show();
                     editTextName.setText("");
